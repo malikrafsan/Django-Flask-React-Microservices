@@ -5,6 +5,9 @@ import { Login } from "./pages/login";
 import { Home } from "./pages/home";
 import { Navigation } from "./components/navigation";
 import { Logout } from "./pages/logout";
+import { Register } from "./pages/register";
+import "bootstrap/dist/css/bootstrap.min.css";
+import "bootstrap/dist/js/bootstrap.bundle.min.js";
 
 function App() {
   return (
@@ -14,6 +17,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/logout" element={<Logout />} />
+        <Route path="/register" element={<Register />} />
       </Routes>
     </BrowserRouter>
   );
