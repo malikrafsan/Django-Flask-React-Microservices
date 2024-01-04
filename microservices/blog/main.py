@@ -1,6 +1,11 @@
 from flask import Flask, request 
 import sqlite3 
 from models import Blog
+from middlewares import APIKeyMiddleware
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
 
 app = Flask(__name__) 
 
@@ -8,9 +13,12 @@ DB_PATH = "db/db.sqlite3"
 SCHEMA_PATH = "db/schema.sql"
 
 # remove db file
-import os
+
 if os.path.exists(DB_PATH):
-  os.remove(DB_PATH)
+  try:
+    os.remove(DB_PATH)
+  except:
+    print("Error while deleting file ", DB_PATH)
 
 connect = sqlite3.connect(DB_PATH)
 with open(SCHEMA_PATH, 'r') as f: 
@@ -58,4 +66,6 @@ def blog():
     }
 
 if __name__ == '__main__': 
-	app.run(debug=False) 
+  app.wsgi_app = APIKeyMiddleware(app.wsgi_app)
+  app.run(debug=True)
+ 
