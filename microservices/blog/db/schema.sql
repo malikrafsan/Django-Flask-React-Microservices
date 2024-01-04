@@ -1,0 +1,6 @@
+CREATE TABLE IF NOT EXISTS blogs (
+  id INTEGER PRIMARY KEY,
+  title TEXT NOT NULL,
+  content TEXT NOT NULL,
+  username TEXT NOT NULL
+)
