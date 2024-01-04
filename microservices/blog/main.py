@@ -43,9 +43,9 @@ def blog():
     }
    
   elif request.method == 'POST':
-    username = request.form['username']
-    title = request.form['title']
-    content = request.form['content']
+    username = request.json['username']
+    title = request.json['title']
+    content = request.json['content']
 
     connect = sqlite3.connect(DB_PATH)
     cursor = connect.cursor() 

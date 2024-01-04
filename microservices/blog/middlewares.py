@@ -13,6 +13,7 @@ class APIKeyMiddleware:
 
         # check header X-API-KEY
         api_key = request.headers.get('X-API-KEY')
+        print(request.headers)
         if api_key is None:
             res = Response(u'API key is missing',
                            mimetype='text/plain', status=401)
