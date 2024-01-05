@@ -13,8 +13,9 @@ class TaskRepo:
 
     data = cursor.fetchall()
     tasks = [Task.deserialize(datum) for datum in data]
+    json_tasks = [task.to_json() for task in tasks]
 
-    return tasks
+    return json_tasks
   
   def fetch_by_id(self, task_id):
     connect = sqlite3.connect(self.db_path)
@@ -29,7 +30,7 @@ class TaskRepo:
   def create(self, task: Task):
     connect = sqlite3.connect(self.db_path)
     cursor = connect.cursor()
-    cursor.execute("INSERT INTO tasks (username, title, description, status) VALUES (?,?,?)",
+    cursor.execute("INSERT INTO tasks (username, title, description, status) VALUES (?,?,?,?)",
                    (task.username, task.title, task.description, task.status))
     connect.commit()
 

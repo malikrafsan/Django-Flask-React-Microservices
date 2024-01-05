@@ -18,7 +18,7 @@ class TaskView(APIView):
         username = request.user.username
 
         response = requests.get(
-            f'http://localhost:5001/blog?username={username}',
+            f'http://localhost:5002/task?username={username}',
             headers={
                 'x-api-key': TaskView.api_key
             })
@@ -32,14 +32,14 @@ class TaskView(APIView):
       try:
         username = request.user.username
         title = request.data['title']
-        content = request.data['description']
+        description = request.data['description']
 
         response = requests.post(
-            'http://localhost:5001/blog',
+            'http://localhost:5002/task',
             json={
                 'username': username,
                 'title': title,
-                'content': content
+                'description': description
             },
             headers={
                 'x-api-key': TaskView.api_key
@@ -60,7 +60,7 @@ class TaskDetailView(APIView):
         id = request.data['id']
 
         response = requests.get(
-            f'http://localhost:5000/5001/{id}?username={username}',
+            f'http://localhost:5002/task/{id}?username={username}',
             headers={
                 'x-api-key': TaskDetailView.api_key
             })
@@ -79,7 +79,7 @@ class TaskDetailView(APIView):
         status = request.data['status']
 
         response = requests.put(
-            f'http://localhost:5001/blog/{id}?username={username}',
+            f'http://localhost:5002/task/{id}?username={username}',
             json={
                 'title': title,
                 'content': content,
@@ -100,7 +100,7 @@ class TaskDetailView(APIView):
         username = request.user.username
 
         response = requests.delete(
-            f'http://localhost:5001/blog/{id}?username={username}',
+            f'http://localhost:5002/task/{id}?username={username}',
             headers={
                 'x-api-key': TaskDetailView.api_key
             })

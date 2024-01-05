@@ -26,9 +26,10 @@ class Task:
     def deserialize(task: list):
         return Task(
             id=task[0],
-            username=task[1],
-            title=task[2],
-            content=task[3]
+            title=task[1],
+            description=task[2],
+            status=Status[task[3]],
+            username=task[4],
         )
 
     def change_status(self, status: Status):
