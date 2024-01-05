@@ -1,6 +1,7 @@
 from flask import Flask, request 
 import sqlite3 
 from models import Blog
+from repositories import BlogRepo
 from middlewares import APIKeyMiddleware
 from dotenv import load_dotenv
 import os
@@ -28,12 +29,8 @@ def blog():
   if request.method == 'GET':
     username = request.args.get('username')
 
-    connect = sqlite3.connect(DB_PATH)
-    cursor = connect.cursor() 
-    cursor.execute('SELECT * FROM blogs where username = ?', (username,))
-  
-    data = cursor.fetchall()
-    blogs = [Blog.deserialize(datum) for datum in data]
+    blog_repo = BlogRepo(DB_PATH)
+    blogs = blog_repo.fetch_by_username(username)
 
     return {
       'status': 'success',
@@ -46,22 +43,15 @@ def blog():
     title = request.json['title']
     content = request.json['content']
 
-    connect = sqlite3.connect(DB_PATH)
-    cursor = connect.cursor() 
-    cursor.execute("INSERT INTO blogs (username, title, content) VALUES (?,?,?)", (username, title, content))
-    connect.commit()
+    blog = Blog(None, username, title, content)
 
-    blog_id = cursor.lastrowid
+    blog_repo = BlogRepo(DB_PATH)
+    blog = blog_repo.create_blog(blog)
 
     return {
       'status': 'success',
       'message': 'blog created successfully',
-      'data': {
-        'id': blog_id,
-        'username': username,
-        'title': title,
-        'content': content
-      }
+      'data': blog.to_json()
     }
 
 if __name__ == '__main__': 

@@ -16,3 +16,11 @@ class Blog:
             title=blog[2],
             content=blog[3]
         )
+
+    def to_json(self):
+        return {
+            'id': self.id,
+            'username': self.username,
+            'title': self.title,
+            'content': self.content
+        }
