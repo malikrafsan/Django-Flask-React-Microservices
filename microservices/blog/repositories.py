@@ -15,7 +15,7 @@ class BlogRepo:
 
     return blogs
   
-  def create_blog(self, blog: Blog):
+  def create(self, blog: Blog):
     connect = sqlite3.connect(self.db_path)
     cursor = connect.cursor() 
     cursor.execute("INSERT INTO blogs (username, title, content) VALUES (?,?,?)", (blog.username, blog.title, blog.content))

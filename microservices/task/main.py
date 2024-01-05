@@ -1,6 +1,7 @@
 from flask import Flask, request 
 import sqlite3 
 from models import Task, Status
+from repositories import TaskRepo
 from middlewares import APIKeyMiddleware
 from dotenv import load_dotenv
 import os
@@ -28,17 +29,13 @@ def task():
   if request.method == 'GET':
     username = request.args.get('username')
 
-    connect = sqlite3.connect(DB_PATH)
-    cursor = connect.cursor() 
-    cursor.execute('SELECT * FROM tasks where username = ?', (username,))
-  
-    data = cursor.fetchall()
-    blogs = [Task.deserialize(datum) for datum in data]
+    task_repo = TaskRepo(DB_PATH)
+    tasks = task_repo.fetch_by_username(username)
 
     return {
       'status': 'success',
       'message': 'task retrieved successfully',
-      'data': blogs
+      'data': tasks
     }
    
   elif request.method == 'POST':
@@ -47,14 +44,11 @@ def task():
     description = request.json['description']
     status = Status.TODO.to_str()
 
-    connect = sqlite3.connect(DB_PATH)
-    cursor = connect.cursor() 
-    cursor.execute("INSERT INTO tasks (username, title, description, status) VALUES (?,?,?,?)", (username, title, description, status))
-    connect.commit()
+    task = Task(None, username, title, description, status)
 
-    blog_id = cursor.lastrowid
+    task_repo = TaskRepo(DB_PATH)
 
-    task = Task(blog_id, username, title, description, status)
+    task = task_repo.create(task)
 
     return {
       'status': 'success',
@@ -65,12 +59,17 @@ def task():
 @app.route("/task/<int:id>", methods=['GET', 'PUT', 'DELETE'])
 def task_detail(id):
   if request.method == 'GET':
-    connect = sqlite3.connect(DB_PATH)
-    cursor = connect.cursor() 
-    cursor.execute('SELECT * FROM tasks where id = ?', (id,))
-  
-    data = cursor.fetchone()
-    task = Task.deserialize(data)
+    task_repo = TaskRepo(DB_PATH)
+    task = task_repo.fetch_by_id(id)
+
+    # validate username
+    username = request.args.get('username')
+
+    if task.username != username:
+      return {
+        'status': 'error',
+        'message': 'username is invalid',
+      }, 401
 
     return {
       'status': 'success',
@@ -79,16 +78,22 @@ def task_detail(id):
     }
    
   elif request.method == 'PUT':
-    title = request.json['title']
-    description = request.json['description']
-    status = request.json['status']
+    username = request.args.get('username')
 
-    connect = sqlite3.connect(DB_PATH)
-    cursor = connect.cursor() 
-    cursor.execute("UPDATE tasks SET title = ?, description = ?, status = ? WHERE id = ?", (title, description, status, id))
-    connect.commit()
+    task_repo = TaskRepo(DB_PATH)
+    task = task_repo.fetch_by_id(id)
 
-    task = Task(id, title, description, status)
+    if task.username != username:
+      return {
+        'status': 'error',
+        'message': 'username is invalid',
+      }, 401
+    
+    task.title = request.json['title']
+    task.description = request.json['description']
+    task.status = request.json['status']
+
+    task = task_repo.update(task)
 
     return {
       'status': 'success',
@@ -97,10 +102,18 @@ def task_detail(id):
     }
 
   elif request.method == 'DELETE':
-    connect = sqlite3.connect(DB_PATH)
-    cursor = connect.cursor() 
-    cursor.execute("DELETE FROM tasks WHERE id = ?", (id,))
-    connect.commit()
+    username = request.args.get('username')
+
+    task_repo = TaskRepo(DB_PATH)
+    task = task_repo.fetch_by_id(id)
+
+    if task.username != username:
+      return {
+        'status': 'error',
+        'message': 'username is invalid',
+      }, 401
+    
+    task_repo.delete(id)
 
     return {
       'status': 'success',

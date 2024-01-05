@@ -46,7 +46,7 @@ def blog():
     blog = Blog(None, username, title, content)
 
     blog_repo = BlogRepo(DB_PATH)
-    blog = blog_repo.create_blog(blog)
+    blog = blog_repo.create(blog)
 
     return {
       'status': 'success',
