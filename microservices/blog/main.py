@@ -12,7 +12,6 @@ app = Flask(__name__)
 DB_PATH = "db/db.sqlite3"
 SCHEMA_PATH = "db/schema.sql"
 
-# remove db file
 
 if os.path.exists(DB_PATH):
   try:

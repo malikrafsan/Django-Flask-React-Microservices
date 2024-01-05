@@ -1,10 +1,6 @@
-# create dataclass for blog
-
-# import dataclass
 from dataclasses import dataclass
 
 
-# create dataclass for blog
 @dataclass
 class Blog:
     id: int

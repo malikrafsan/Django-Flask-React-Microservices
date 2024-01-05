@@ -28,4 +28,5 @@ urlpatterns = [
         name ='token_refresh'),
     path('auth/', include('authentification.urls')),
     path('blog/', include('blog.urls')),
+    path('task/', include('task.urls')),
 ]
