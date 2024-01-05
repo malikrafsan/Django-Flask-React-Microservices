@@ -2,6 +2,17 @@ import axios from "axios";
 
 let refresh = false;
 
+axios.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem("access_token");
+    if (token) {
+      config.headers["Authorization"] = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error) => Promise.reject(error)
+);
+
 axios.interceptors.response.use(
   (resp) => resp,
   async (error) => {
@@ -11,7 +22,7 @@ axios.interceptors.response.use(
       console.log("refreshToken", refreshToken);
 
       const response = await axios.post(
-        "http://localhost:8000/token/refresh/",
+        "http://localhost:8000/auth/token/refresh/",
         {
           refresh: refreshToken,
         },

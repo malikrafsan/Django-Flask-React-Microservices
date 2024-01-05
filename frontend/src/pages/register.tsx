@@ -15,7 +15,8 @@ export const Register = () => {
       password,
     };
 
-    const { data } = await axios.post("http://localhost:8000/register/", user, {
+    try {
+          const { data } = await axios.post("http://localhost:8000/auth/register/", user, {
       headers: {
         "Content-Type": "application/json",
       },
@@ -23,11 +24,11 @@ export const Register = () => {
     });
     console.log(data);
 
-    // localStorage.clear();
-    // localStorage.setItem("access_token", data.access);
-    // localStorage.setItem("refresh_token", data.refresh);
-    // axios.defaults.headers.common["Authorization"] = `Bearer ${data["access"]}`;
     window.location.href = "/login";
+    } catch (e) {
+      alert("error" + JSON.stringify(e));
+      console.log(e);
+    }
   };
 
   return (

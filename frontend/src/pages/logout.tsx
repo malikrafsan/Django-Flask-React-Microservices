@@ -5,7 +5,7 @@ export const Logout = () => {
   const logout = async () => {
     try {
       const { data } = await axios.post(
-        "http://localhost:8000/logout/",
+        "http://localhost:8000/auth/logout/",
         {
           refresh_token: localStorage.getItem("refresh_token"),
         },

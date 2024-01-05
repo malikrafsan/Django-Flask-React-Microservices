@@ -8,13 +8,6 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework import status
 from django.contrib.auth.models import User
 
-class HomeView(APIView):
-   permission_classes = (IsAuthenticated, )
-   def get(self, request):
-      content = {
-        'message': 'Welcome to the Home Page!'
-      }
-      return Response(content, headers={'Access-Control-Allow-Origin': 'http://localhost:5173'})
 
 class LogoutView(APIView):
      permission_classes = (IsAuthenticated,)
@@ -23,9 +16,9 @@ class LogoutView(APIView):
           refresh_token = request.data["refresh_token"]
           token = RefreshToken(refresh_token)
           token.blacklist()
-          return Response(status=status.HTTP_205_RESET_CONTENT, headers={'Access-Control-Allow-Origin': 'http://localhost:5173'})
+          return Response(status=status.HTTP_205_RESET_CONTENT)
         except Exception as e:
-          return Response(status=status.HTTP_400_BAD_REQUEST, headers={'Access-Control-Allow-Origin': 'http://localhost:5173'})
+          return Response(status=status.HTTP_400_BAD_REQUEST)
 
 class RegisterView(APIView):
    permission_classes = ()
@@ -35,6 +28,6 @@ class RegisterView(APIView):
         password = request.data['password']
         user = User.objects.create_user(username=username, password=password)
         user.save()
-        return Response(status=status.HTTP_201_CREATED, headers={'Access-Control-Allow-Origin': 'http://localhost:5173'})
+        return Response(status=status.HTTP_201_CREATED)
       except Exception as e:
-        return Response(status=status.HTTP_400_BAD_REQUEST, headers={'Access-Control-Allow-Origin': 'http://localhost:5173'})
+        return Response(status=status.HTTP_400_BAD_REQUEST)

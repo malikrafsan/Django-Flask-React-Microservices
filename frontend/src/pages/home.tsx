@@ -11,6 +11,7 @@ export const Home = () => {
         headers: {
           "Content-Type": "application/json",
         },
+        withCredentials: true,
       });
       setMessage(data.message);
     } catch (e) {
