@@ -12,9 +12,9 @@ class Blog:
     def deserialize(blog: list):
         return Blog(
             id=blog[0],
-            username=blog[1],
-            title=blog[2],
-            content=blog[3]
+            title=blog[1],
+            content=blog[2],
+            username=blog[3],
         )
 
     def to_json(self):

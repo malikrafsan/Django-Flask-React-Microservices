@@ -121,5 +121,5 @@ def task_detail(id):
 
 if __name__ == '__main__': 
   app.wsgi_app = APIKeyMiddleware(app.wsgi_app)
-  app.run(debug=True)
+  app.run(debug=True, port=5002)
  

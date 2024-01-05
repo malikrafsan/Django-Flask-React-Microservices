@@ -18,6 +18,7 @@ class LogoutView(APIView):
           token.blacklist()
           return Response(status=status.HTTP_205_RESET_CONTENT)
         except Exception as e:
+          print(e)
           return Response(status=status.HTTP_400_BAD_REQUEST)
 
 class RegisterView(APIView):
@@ -30,4 +31,5 @@ class RegisterView(APIView):
         user.save()
         return Response(status=status.HTTP_201_CREATED)
       except Exception as e:
+        print(e)
         return Response(status=status.HTTP_400_BAD_REQUEST)

@@ -26,6 +26,7 @@ with open(SCHEMA_PATH, 'r') as f:
 	
 @app.route("/blog", methods=['GET', 'POST'])
 def blog():
+  print("request.method", request.method)
   if request.method == 'GET':
     username = request.args.get('username')
 
@@ -39,11 +40,16 @@ def blog():
     }
    
   elif request.method == 'POST':
+    print("request.json")
     username = request.json['username']
     title = request.json['title']
     content = request.json['content']
 
+    print("username", username)
+
     blog = Blog(None, username, title, content)
+
+    print("blog.to_json()", blog.to_json())
 
     blog_repo = BlogRepo(DB_PATH)
     blog = blog_repo.create(blog)
@@ -56,5 +62,5 @@ def blog():
 
 if __name__ == '__main__': 
   app.wsgi_app = APIKeyMiddleware(app.wsgi_app)
-  app.run(debug=True)
+  app.run(debug=True, port=5001)
  

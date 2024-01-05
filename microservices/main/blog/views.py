@@ -11,21 +11,22 @@ import os
 
 class BlogView(APIView):
   permission_classes = (IsAuthenticated, )
-  api_key = os.getenv('API_KEY')
+  api_key = os.getenv('API_KEY_BLOG')
 
   def get(self, request):
       try:
         username = request.user.username
 
         response = requests.get(
-          f'http://localhost:5000/blog?username={username}', 
+          f'http://localhost:5001/blog?username={username}', 
           headers={
             'x-api-key': BlogView.api_key
           })
         
         return Response(response.json(), headers={'Access-Control-Allow-Origin': 'http://localhost:5173'})
       except Exception as e:
-        return Response(status=status.HTTP_400_BAD_REQUEST, headers={'Access-Control-Allow-Origin': 'http://localhost:5173'})
+        print(e)
+        return Response(status=status.HTTP_400_BAD_REQUEST)
   
   def post(self, request):
       try:
@@ -34,7 +35,7 @@ class BlogView(APIView):
         content = request.data['content']
 
         response = requests.post(
-          'http://localhost:5000/blog', 
+          'http://localhost:5001/blog', 
           json={
             'username': username,
             'title': title,
@@ -44,6 +45,7 @@ class BlogView(APIView):
             'x-api-key': BlogView.api_key
           })
         
-        return Response(response.json(), headers={'Access-Control-Allow-Origin': 'http://localhost:5173'})
+        return Response(response.json())
       except Exception as e:
-        return Response(status=status.HTTP_400_BAD_REQUEST, headers={'Access-Control-Allow-Origin': 'http://localhost:5173'})
+        print(e)
+        return Response(status=status.HTTP_400_BAD_REQUEST)
