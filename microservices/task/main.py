@@ -58,7 +58,7 @@ def task():
         }
 
 
-@app.route("/task/<int:id>", methods=['GET', 'PUT', 'DELETE'])
+@app.route("/task/<int:id>", methods=['GET', 'PATCH', 'DELETE'])
 def task_detail(id):
     if request.method == 'GET':
         task_repo = TaskRepo(DB_PATH)
@@ -78,7 +78,7 @@ def task_detail(id):
             'data': task.to_json()
         }
 
-    elif request.method == 'PUT':
+    elif request.method == 'PATCH':
         username = request.args.get('username')
 
         task_repo = TaskRepo(DB_PATH)
@@ -90,10 +90,7 @@ def task_detail(id):
                 'message': 'username is invalid',
             }, 401
 
-        task.title = request.json['title']
-        task.description = request.json['description']
         task.status = request.json['status']
-
         task = task_repo.update(task)
 
         return {

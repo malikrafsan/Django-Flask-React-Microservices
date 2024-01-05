@@ -12,6 +12,10 @@ class Status(enum.Enum):
     
     def to_str(self):
         return self.name
+    
+    @staticmethod
+    def from_str(status: str):
+        return Status[status.upper()]
 
 
 @dataclass
@@ -28,7 +32,7 @@ class Task:
             id=task[0],
             title=task[1],
             description=task[2],
-            status=Status[task[3]],
+            status=Status.from_str(task[3]),
             username=task[4],
         )
 

@@ -31,7 +31,7 @@ export const Login = () => {
 
   return (
     <div className="Auth-form-container d-flex justify-content-center">
-      <form className="Auth-form mt-5" onSubmit={onSubmit} style={{
+      <form className="Auth-form my-5" onSubmit={onSubmit} style={{
         maxWidth: "800px",
         minWidth: "400px",
       }}>

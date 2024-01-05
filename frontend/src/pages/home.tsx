@@ -56,6 +56,45 @@ export const Home = () => {
     }
   };
 
+  const editTask = async (id: number, status: string) => {
+    try {
+      const { data } = await axios.patch(
+        `http://localhost:8000/task/${id}/`,
+        {
+          status,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+          withCredentials: true,
+        }
+      );
+      console.log(data);
+      getTasks();
+    } catch (e) {
+      console.log("error", e);
+    }
+  }
+
+  const deleteTask = async (id: number) => {
+    try {
+      const { data } = await axios.delete(
+        `http://localhost:8000/task/${id}/`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+          withCredentials: true,
+        }
+      );
+      console.log(data);
+      getTasks();
+    } catch (e) {
+      console.log("error", e);
+    }
+  }
+
   useEffect(() => {
     if (!localStorage.getItem("access_token")) {
       window.location.href = "/login";
@@ -68,7 +107,7 @@ export const Home = () => {
   }, []);
 
   return (
-    <div className="form-signin mt-5 text-center">
+    <div className="form-signin my-5 text-center">
       <h2>Hi {message}</h2>
       <div className="p-3">
         <div className="d-flex justify-content-between">
@@ -108,8 +147,19 @@ export const Home = () => {
           {tasks.map((task) => (
             <div className="card mt-3" key={task.id}>
               <div className="card-body">
-                <h5 className="card-title">{task.title}</h5>
+                <h5 className="card-title">{task.title} ({task.status})</h5>
                 <p className="card-text">{task.description}</p>
+              </div>
+              <div className="d-flex justify-content-between">
+                <button className="btn btn-primary"
+                  onClick={() => editTask(task.id, "doing")}
+                >Doing</button>
+                <button className="btn btn-success"
+                  onClick={() => editTask(task.id, "done")}
+                >Done</button>
+                <button className="btn btn-danger"
+                  onClick={() => deleteTask(task.id)}
+                >Delete</button>
               </div>
             </div>
           ))}
@@ -120,12 +170,14 @@ export const Home = () => {
         show={showAddBlogModal}
         handleClose={() => {
           setShowAddBlogModal(false);
+          getBlogs();
         }}
       />
       <AddTaskModal
         show={showAddTaskModal}
         handleClose={() => {
           setShowAddTaskModal(false);
+          getTasks();
         }}
       />
     </div>

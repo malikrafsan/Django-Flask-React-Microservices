@@ -54,10 +54,9 @@ class TaskDetailView(APIView):
   permission_classes = (IsAuthenticated, )
   api_key = os.getenv('API_KEY_TASK')
 
-  def get(self, request):
+  def get(self, request, id):
       try:
         username = request.user.username
-        id = request.data['id']
 
         response = requests.get(
             f'http://localhost:5002/task/{id}?username={username}',
@@ -70,19 +69,14 @@ class TaskDetailView(APIView):
         print(e)
         return Response(status=http_status.HTTP_400_BAD_REQUEST)
       
-  def put(self, request):
+  def patch(self, request, id):
       try:
         username = request.user.username
-        id = request.data['id']
-        title = request.data['title']
-        content = request.data['description']
         status = request.data['status']
 
-        response = requests.put(
+        response = requests.patch(
             f'http://localhost:5002/task/{id}?username={username}',
             json={
-                'title': title,
-                'content': content,
                 'status': status
             },
             headers={
@@ -94,9 +88,8 @@ class TaskDetailView(APIView):
         print(e)
         return Response(status=http_status.HTTP_400_BAD_REQUEST)
       
-  def delete(self, request):
+  def delete(self, request, id):
       try:
-        id = request.data['id']
         username = request.user.username
 
         response = requests.delete(
