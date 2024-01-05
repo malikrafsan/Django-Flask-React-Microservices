@@ -54,10 +54,11 @@ class TaskDetailView(APIView):
 
   def get(self, request):
       try:
+        username = request.user.username
         id = request.data['id']
 
         response = requests.get(
-            f'http://localhost:5000/blog/{id}',
+            f'http://localhost:5000/blog/{id}?username={username}',
             headers={
                 'x-api-key': TaskDetailView.api_key
             })
@@ -75,9 +76,8 @@ class TaskDetailView(APIView):
         status = request.data['status']
 
         response = requests.put(
-            f'http://localhost:5000/blog/{id}',
+            f'http://localhost:5000/blog/{id}?username={username}',
             json={
-                'username': username,
                 'title': title,
                 'content': content,
                 'status': status
@@ -93,9 +93,10 @@ class TaskDetailView(APIView):
   def delete(self, request):
       try:
         id = request.data['id']
+        username = request.user.username
 
         response = requests.delete(
-            f'http://localhost:5000/blog/{id}',
+            f'http://localhost:5000/blog/{id}?username={username}',
             headers={
                 'x-api-key': TaskDetailView.api_key
             })

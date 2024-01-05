@@ -62,7 +62,6 @@ def task_detail(id):
     task_repo = TaskRepo(DB_PATH)
     task = task_repo.fetch_by_id(id)
 
-    # validate username
     username = request.args.get('username')
 
     if task.username != username:
