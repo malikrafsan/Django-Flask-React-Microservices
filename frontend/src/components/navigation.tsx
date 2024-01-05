@@ -12,23 +12,21 @@ export const Navigation = () => {
   }, [isAuth]);
 
   return (
-    <div>
-      <Navbar bg="dark" variant="dark">
-        <Navbar.Brand href="/">JWT Authentification</Navbar.Brand>
-        <Nav className="me-auto">
-          {isAuth ? <Nav.Link href="/">Home</Nav.Link> : null}
-        </Nav>
-        <Nav>
-          {isAuth ? (
-            <Nav.Link href="/logout">Logout</Nav.Link>
-          ) : (
-            <>
-              <Nav.Link href="/login">Login</Nav.Link>
-              <Nav.Link href="/register">Register</Nav.Link>
-            </>
-          )}
-        </Nav>
-      </Navbar>
-    </div>
+    <Navbar bg="dark" variant="dark" className="p-3">
+      <Navbar.Brand href="/">JWT Authentification</Navbar.Brand>
+      <Nav className="me-auto">
+        {isAuth ? <Nav.Link href="/">Home</Nav.Link> : null}
+      </Nav>
+      <Nav>
+        {isAuth ? (
+          <Nav.Link href="/logout">Logout</Nav.Link>
+        ) : (
+          <>
+            <Nav.Link href="/login">Login</Nav.Link>
+            <Nav.Link href="/register">Register</Nav.Link>
+          </>
+        )}
+      </Nav>
+    </Navbar>
   );
 };
